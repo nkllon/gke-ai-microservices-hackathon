@@ -55,29 +55,78 @@ Get Google's expert guidance on our GKE hackathon architecture to ensure optimal
 ## 🏗️ Technical Architecture Summary
 
 ### **What We're Building:**
-```
-┌─────────────────────────────────────────────────────────────┐
-│                    GKE Cluster                             │
-├─────────────────────────────────────────────────────────────┤
-│  ┌─────────────────┐  ┌─────────────────┐  ┌─────────────┐ │
-│  │   Frontend      │  │   API Gateway   │  │   Load      │ │
-│  │   Service       │  │   Service       │  │   Balancer  │ │
-│  └─────────────────┘  └─────────────────┘  └─────────────┘ │
-│           │                    │                    │       │
-│           └────────────────────┼────────────────────┘       │
-│                                │                            │
-│                    ┌─────────────────┐                      │
-│                    │   Orchestrator  │                      │
-│                    │   Service       │                      │
-│                    └─────────────────┘                      │
-│                                │                            │
-│           ┌────────────────────┼────────────────────┐       │
-│           │                    │                    │       │
-│  ┌─────────────────┐  ┌─────────────────┐  ┌─────────────┐ │
-│  │   Security      │  │   Quality       │  │   Test      │ │
-│  │   Agent         │  │   Agent         │  │   Agent     │ │
-│  └─────────────────┘  └─────────────────┘  └─────────────┘ │
-└─────────────────────────────────────────────────────────────┘
+
+```mermaid
+graph TB
+    %% External User
+    User[👤 Developer] --> Frontend
+    
+    %% Frontend Layer
+    Frontend[Frontend Service<br/>Streamlit/React<br/>HPA: 2-5 pods] --> API
+    
+    %% API Layer
+    API[API Gateway Service<br/>FastAPI + Auth<br/>HPA: 3-8 pods] --> LB
+    
+    %% Load Balancer
+    LB[Load Balancer<br/>GKE Ingress Controller<br/>SSL Termination] --> Orchestrator
+    
+    %% Orchestrator
+    Orchestrator[Orchestrator Service<br/>Ghostbusters Core<br/>StatefulSet: 1-3 replicas]
+    
+    %% AI Agent Services
+    Orchestrator --> Security[Security Agent<br/>Vulnerability Scanning<br/>HPA: 3-10 pods<br/>256Mi-512Mi RAM]
+    Orchestrator --> Quality[Quality Agent<br/>Code Quality Analysis<br/>HPA: 3-10 pods<br/>256Mi-512Mi RAM]
+    Orchestrator --> Test[Test Agent<br/>Test Coverage Analysis<br/>HPA: 3-10 pods<br/>256Mi-512Mi RAM]
+    Orchestrator --> Perf[Performance Agent<br/>Performance Analysis<br/>HPA: 3-10 pods<br/>256Mi-512Mi RAM]
+    
+    %% Storage
+    Security --> Storage[Cloud Storage<br/>Code Repository<br/>Analysis Results<br/>Persistent Data]
+    Quality --> Storage
+    Test --> Storage
+    Perf --> Storage
+    
+    %% Monitoring & Observability
+    Storage --> Monitoring[Cloud Monitoring<br/>GKE Metrics<br/>Performance Data<br/>Auto-scaling Triggers]
+    Storage --> Logging[Cloud Logging<br/>Centralized Logs<br/>Audit Trail<br/>Error Tracking]
+    
+    %% Quality Dashboard
+    Monitoring --> Dashboard[Quality Dashboard<br/>Results Visualization<br/>Quality Gates<br/>Deployment Control]
+    Logging --> Dashboard
+    
+    %% Production Environment
+    Dashboard --> Production[Production Environment<br/>GKE Deployment<br/>Quality Gate Control<br/>Rollback Capability]
+    
+    %% GKE Cluster Container
+    subgraph GKE["Google Kubernetes Engine (GKE) Cluster"]
+        Frontend
+        API
+        LB
+        Orchestrator
+        Security
+        Quality
+        Test
+        Perf
+        Storage
+        Monitoring
+        Logging
+        Dashboard
+        Production
+    end
+    
+    %% Styling
+    classDef userClass fill:#e8f0fe,stroke:#1a73e8,stroke-width:2px
+    classDef serviceClass fill:#f8f9fa,stroke:#34a853,stroke-width:2px
+    classDef agentClass fill:#fef7e0,stroke:#f4b400,stroke-width:2px
+    classDef storageClass fill:#fce8e6,stroke:#ea4335,stroke-width:2px
+    classDef gatewayClass fill:#e6f4ea,stroke:#34a853,stroke-width:2px
+    classDef gkeClass fill:#e8f0fe,stroke:#1a73e8,stroke-width:3px
+    
+    class User userClass
+    class Frontend,API,Orchestrator,Monitoring,Logging,Dashboard,Production serviceClass
+    class Security,Quality,Test,Perf agentClass
+    class Storage storageClass
+    class LB gatewayClass
+    class GKE gkeClass
 ```
 
 ### **Key GKE Features We're Using:**
@@ -275,7 +324,7 @@ Get Google's expert guidance on our GKE hackathon architecture to ensure optimal
 ## 🌟 Our Value Proposition
 
 ### **Why This Project is Special:**
-1. **Leverages Existing Framework** - We're not starting from scratch
+1. **Leverages Existing Framework** - Ghostbusters multi-agent system already operational
 2. **Real-World Impact** - Solves actual software development problems
 3. **GKE Showcase** - Demonstrates multiple GKE capabilities
 4. **AI Innovation** - Multi-agent orchestration with quality automation
