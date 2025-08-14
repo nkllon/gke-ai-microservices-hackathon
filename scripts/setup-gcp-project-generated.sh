@@ -19,21 +19,21 @@ BILLING_ACCOUNT="01F112-E73FD5-795507"
 
 # REQUIRED APIs (explicitly defined)
 REQUIRED_APIS=(
-    "    "container.googleapis.com"
-    "compute.googleapis.com"
-    "monitoring.googleapis.com"
-    "logging.googleapis.com"
-    "cloudresourcemanager.googleapis.com"
-    "iam.googleapis.com""
+    "    "container.googleapis.com"           # GKE clusters
+    "compute.googleapis.com"           # VM instances, networking
+    "monitoring.googleapis.com"           # Metrics, alerts, dashboards
+    "logging.googleapis.com"           # Log aggregation
+    "cloudresourcemanager.googleapis.com"           # Project management
+    "iam.googleapis.com"           # Identity and access management"
 )
 
 # EXCLUDED APIs (explicitly disabled for cost control)
 EXCLUDED_APIS=(
-    "    "cloudfunctions.googleapis.com"
-    "run.googleapis.com"
-    "firestore.googleapis.com"
-    "pubsub.googleapis.com"
-    "storage.googleapis.com""
+    "    "cloudfunctions.googleapis.com"           # Not using serverless
+    "run.googleapis.com"           # Not using Cloud Run
+    "firestore.googleapis.com"           # Not using Firestore
+    "pubsub.googleapis.com"           # Not using messaging
+    "storage.googleapis.com"           # Not using Cloud Storage"
 )
 
 # Cost control thresholds
