@@ -14,7 +14,7 @@ NC='\033[0m' # No Color
 
 # Configuration
 CLUSTER_NAME="ghostbusters-hackathon"
-PROJECT_ID="aardvark-linkedin-grepper"
+PROJECT_ID="ghostbusters-hackathon-2025"
 REGION="us-central1"
 ZONE="us-central1-a"
 
