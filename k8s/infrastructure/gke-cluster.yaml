@@ -1,0 +1,52 @@
+apiVersion: container.googleapis.com/v1
+kind: Cluster
+metadata:
+  name: ghostbusters-hackathon
+  labels:
+    project: ghostbusters-ai
+    environment: hackathon
+    cost-tier: development
+spec:
+  # Cost-optimized configuration
+  nodePools:
+  - name: default-pool
+    config:
+      machineType: e2-micro  # Smallest, cheapest machine type
+      diskSizeGb: 20         # Minimal disk size
+      diskType: pd-standard  # Standard disk (cheaper than pd-ssd)
+      preemptible: true      # 50% cost savings
+      imageType: cos         # Container-optimized OS
+      metadata:
+        disable-legacy-endpoints: "true"
+    autoscaling:
+      enabled: true
+      minNodeCount: 1        # Start with 1 node
+      maxNodeCount: 3        # Max 3 nodes during development
+    management:
+      autoRepair: true       # Auto-repair for reliability
+      autoUpgrade: false     # Disable auto-upgrade to control costs
+    version: "1.28"          # Stable GKE version
+  
+  # Network configuration
+  network: default
+  subnetwork: default
+  
+  # Security configuration
+  masterAuth:
+    clientCertificateConfig:
+      issueClientCertificate: false
+  
+  # Monitoring and logging
+  loggingService: logging.googleapis.com/kubernetes
+  monitoringService: monitoring.googleapis.com/kubernetes
+  
+  # Network policy
+  networkPolicy:
+    enabled: true
+    provider: CALICO
+  
+  # Cost control labels
+  resourceLabels:
+    cost-center: hackathon
+    environment: development
+    auto-shutdown: "true"

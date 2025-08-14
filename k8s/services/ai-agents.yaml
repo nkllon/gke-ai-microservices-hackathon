@@ -1,0 +1,421 @@
+# Security Agent
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ghostbusters-security-agent
+  namespace: ghostbusters-ai
+  labels:
+    app: ghostbusters-security-agent
+    component: ai-agent
+    type: security
+    version: v1.0.0
+spec:
+  replicas: 1  # Start with 1 replica for cost control
+  selector:
+    matchLabels:
+      app: ghostbusters-security-agent
+  template:
+    metadata:
+      labels:
+        app: ghostbusters-security-agent
+        component: ai-agent
+        type: security
+        version: v1.0.0
+    spec:
+      containers:
+      - name: security-agent
+        image: gcr.io/aardvark-linkedin-grepper/ghostbusters-security-agent:v1.0.0
+        ports:
+        - containerPort: 8080
+          name: http
+        - containerPort: 9090
+          name: metrics
+        env:
+        - name: ENVIRONMENT
+          value: "development"
+        - name: LOG_LEVEL
+          value: "INFO"
+        - name: AGENT_TYPE
+          value: "security"
+        - name: MAX_CONCURRENT_SCANS
+          value: "3"
+        resources:
+          requests:
+            memory: "128Mi"    # Conservative resource requests
+            cpu: "100m"
+          limits:
+            memory: "256Mi"    # Reasonable resource limits
+            cpu: "200m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 5
+---
+# Quality Agent
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ghostbusters-quality-agent
+  namespace: ghostbusters-ai
+  labels:
+    app: ghostbusters-quality-agent
+    component: ai-agent
+    type: quality
+    version: v1.0.0
+spec:
+  replicas: 1  # Start with 1 replica for cost control
+  selector:
+    matchLabels:
+      app: ghostbusters-quality-agent
+  template:
+    metadata:
+      labels:
+        app: ghostbusters-quality-agent
+        component: ai-agent
+        type: quality
+        version: v1.0.0
+    spec:
+      containers:
+      - name: quality-agent
+        image: gcr.io/aardvark-linkedin-grepper/ghostbusters-quality-agent:v1.0.0
+        ports:
+        - containerPort: 8080
+          name: http
+        - containerPort: 9090
+          name: metrics
+        env:
+        - name: ENVIRONMENT
+          value: "development"
+        - name: LOG_LEVEL
+          value: "INFO"
+        - name: AGENT_TYPE
+          value: "quality"
+        - name: MAX_CONCURRENT_ANALYSES
+          value: "3"
+        resources:
+          requests:
+            memory: "128Mi"    # Conservative resource requests
+            cpu: "100m"
+          limits:
+            memory: "256Mi"    # Reasonable resource limits
+            cpu: "200m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 5
+---
+# Test Agent
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ghostbusters-test-agent
+  namespace: ghostbusters-ai
+  labels:
+    app: ghostbusters-test-agent
+    component: ai-agent
+    type: test
+    version: v1.0.0
+spec:
+  replicas: 1  # Start with 1 replica for cost control
+  selector:
+    matchLabels:
+      app: ghostbusters-test-agent
+  template:
+    metadata:
+      labels:
+        app: ghostbusters-test-agent
+        component: ai-agent
+        type: test
+        version: v1.0.0
+    spec:
+      containers:
+      - name: test-agent
+        image: gcr.io/aardvark-linkedin-grepper/ghostbusters-test-agent:v1.0.0
+        ports:
+        - containerPort: 8080
+          name: http
+        - containerPort: 9090
+          name: metrics
+        env:
+        - name: ENVIRONMENT
+          value: "development"
+        - name: LOG_LEVEL
+          value: "INFO"
+        - name: AGENT_TYPE
+          value: "test"
+        - name: MAX_CONCURRENT_ANALYSES
+          value: "3"
+        resources:
+          requests:
+            memory: "128Mi"    # Conservative resource requests
+            cpu: "100m"
+          limits:
+            memory: "256Mi"    # Reasonable resource limits
+            cpu: "200m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 5
+---
+# Performance Agent
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ghostbusters-performance-agent
+  namespace: ghostbusters-ai
+  labels:
+    app: ghostbusters-performance-agent
+    component: ai-agent
+    type: performance
+    version: v1.0.0
+spec:
+  replicas: 1  # Start with 1 replica for cost control
+  selector:
+    matchLabels:
+      app: ghostbusters-performance-agent
+  template:
+    metadata:
+      labels:
+        app: ghostbusters-performance-agent
+        component: ai-agent
+        type: performance
+        version: v1.0.0
+    spec:
+      containers:
+      - name: performance-agent
+        image: gcr.io/aardvark-linkedin-grepper/ghostbusters-performance-agent:v1.0.0
+        ports:
+        - containerPort: 8080
+          name: http
+        - containerPort: 9090
+          name: metrics
+        env:
+        - name: ENVIRONMENT
+          value: "development"
+        - name: LOG_LEVEL
+          value: "INFO"
+        - name: AGENT_TYPE
+          value: "performance"
+        - name: MAX_CONCURRENT_ANALYSES
+          value: "3"
+        resources:
+          requests:
+            memory: "128Mi"    # Conservative resource requests
+            cpu: "100m"
+          limits:
+            memory: "256Mi"    # Reasonable resource limits
+            cpu: "200m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 5
+---
+# Services for all AI agents
+apiVersion: v1
+kind: Service
+metadata:
+  name: ghostbusters-security-agent
+  namespace: ghostbusters-ai
+  labels:
+    app: ghostbusters-security-agent
+    component: ai-agent
+    type: security
+spec:
+  type: ClusterIP
+  ports:
+  - port: 8080
+    targetPort: 8080
+    name: http
+  - port: 9090
+    targetPort: 9090
+    name: metrics
+  selector:
+    app: ghostbusters-security-agent
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ghostbusters-quality-agent
+  namespace: ghostbusters-ai
+  labels:
+    app: ghostbusters-quality-agent
+    component: ai-agent
+    type: quality
+spec:
+  type: ClusterIP
+  ports:
+  - port: 8080
+    targetPort: 8080
+    name: http
+  - port: 9090
+    targetPort: 9090
+    name: metrics
+  selector:
+    app: ghostbusters-quality-agent
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ghostbusters-test-agent
+  namespace: ghostbusters-ai
+  labels:
+    app: ghostbusters-test-agent
+    component: ai-agent
+    type: test
+spec:
+  type: ClusterIP
+  ports:
+  - port: 8080
+    targetPort: 8080
+    name: http
+  - port: 9090
+    targetPort: 9090
+    name: metrics
+  selector:
+    app: ghostbusters-test-agent
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ghostbusters-performance-agent
+  namespace: ghostbusters-ai
+  labels:
+    app: ghostbusters-performance-agent
+    component: ai-agent
+    type: performance
+spec:
+  type: ClusterIP
+  ports:
+  - port: 8080
+    targetPort: 8080
+    name: http
+  - port: 9090
+    targetPort: 9090
+    name: metrics
+  selector:
+    app: ghostbusters-performance-agent
+---
+# Auto-scaling for all AI agents (conservative for cost control)
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: ghostbusters-security-agent-hpa
+  namespace: ghostbusters-ai
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: ghostbusters-security-agent
+  minReplicas: 1      # Conservative scaling for cost control
+  maxReplicas: 3      # Max 3 replicas during development
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 80  # Scale up at 80% CPU
+  behavior:
+    scaleDown:
+      stabilizationWindowSeconds: 300  # 5 minutes to prevent rapid scaling
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: ghostbusters-quality-agent-hpa
+  namespace: ghostbusters-ai
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: ghostbusters-quality-agent
+  minReplicas: 1      # Conservative scaling for cost control
+  maxReplicas: 3      # Max 3 replicas during development
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 80  # Scale up at 80% CPU
+  behavior:
+    scaleDown:
+      stabilizationWindowSeconds: 300  # 5 minutes to prevent rapid scaling
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: ghostbusters-test-agent-hpa
+  namespace: ghostbusters-ai
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: ghostbusters-test-agent
+  minReplicas: 1      # Conservative scaling for cost control
+  maxReplicas: 3      # Max 3 replicas during development
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 80  # Scale up at 80% CPU
+  behavior:
+    scaleDown:
+      stabilizationWindowSeconds: 300  # 5 minutes to prevent rapid scaling
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: ghostbusters-performance-agent-hpa
+  namespace: ghostbusters-ai
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: ghostbusters-performance-agent
+  minReplicas: 1      # Conservative scaling for cost control
+  maxReplicas: 3      # Max 3 replicas during development
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 80  # Scale up at 80% CPU
+  behavior:
+    scaleDown:
+      stabilizationWindowSeconds: 300  # 5 minutes to prevent rapid scaling

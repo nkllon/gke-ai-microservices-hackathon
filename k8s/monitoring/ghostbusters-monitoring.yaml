@@ -1,0 +1,300 @@
+# Prometheus configuration for metrics collection
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: prometheus-config
+  namespace: ghostbusters-monitoring
+  labels:
+    app: prometheus-config
+    component: monitoring
+data:
+  prometheus.yml: |
+    global:
+      scrape_interval: 15s
+      evaluation_interval: 15s
+    
+    scrape_configs:
+    - job_name: 'ghostbusters-orchestrator'
+      static_configs:
+      - targets: ['ghostbusters-orchestrator.ghostbusters-ai.svc.cluster.local:9090']
+    
+    - job_name: 'ghostbusters-security-agent'
+      static_configs:
+      - targets: ['ghostbusters-security-agent.ghostbusters-ai.svc.cluster.local:9090']
+    
+    - job_name: 'ghostbusters-quality-agent'
+      static_configs:
+      - targets: ['ghostbusters-quality-agent.ghostbusters-ai.svc.cluster.local:9090']
+    
+    - job_name: 'ghostbusters-test-agent'
+      static_configs:
+      - targets: ['ghostbusters-test-agent.ghostbusters-ai.svc.cluster.local:9090']
+    
+    - job_name: 'ghostbusters-performance-agent'
+      static_configs:
+      - targets: ['ghostbusters-performance-agent.ghostbusters-ai.svc.cluster.local:9090']
+    
+    - job_name: 'ghostbusters-frontend'
+      static_configs:
+      - targets: ['ghostbusters-frontend.ghostbusters-ingress.svc.cluster.local:80']
+---
+# Prometheus deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prometheus
+  namespace: ghostbusters-monitoring
+  labels:
+    app: prometheus
+    component: monitoring
+    version: v2.45.0
+spec:
+  replicas: 1  # Single replica for cost control
+  selector:
+    matchLabels:
+      app: prometheus
+  template:
+    metadata:
+      labels:
+        app: prometheus
+        component: monitoring
+        version: v2.45.0
+    spec:
+      containers:
+      - name: prometheus
+        image: prom/prometheus:v2.45.0
+        ports:
+        - containerPort: 9090
+          name: http
+        args:
+        - '--config.file=/etc/prometheus/prometheus.yml'
+        - '--storage.tsdb.path=/prometheus'
+        - '--web.console.libraries=/etc/prometheus/console_libraries'
+        - '--web.console.templates=/etc/prometheus/consoles'
+        - '--storage.tsdb.retention.time=7d'  # 7 days retention for cost control
+        - '--web.enable-lifecycle'
+        volumeMounts:
+        - name: prometheus-config
+          mountPath: /etc/prometheus
+        - name: prometheus-storage
+          mountPath: /prometheus
+        resources:
+          requests:
+            memory: "128Mi"    # Conservative resource requests
+            cpu: "100m"
+          limits:
+            memory: "256Mi"    # Reasonable resource limits
+            cpu: "200m"
+      volumes:
+      - name: prometheus-config
+        configMap:
+          name: prometheus-config
+      - name: prometheus-storage
+        emptyDir: {}  # Use emptyDir for cost control
+---
+# Prometheus service
+apiVersion: v1
+kind: Service
+metadata:
+  name: prometheus
+  namespace: ghostbusters-monitoring
+  labels:
+    app: prometheus
+    component: monitoring
+spec:
+  type: ClusterIP
+  ports:
+  - port: 9090
+    targetPort: 9090
+    name: http
+  selector:
+    app: prometheus
+---
+# Grafana configuration for dashboards
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafana-dashboards
+  namespace: ghostbusters-monitoring
+  labels:
+    app: grafana-dashboards
+    component: monitoring
+data:
+  ghostbusters-overview.json: |
+    {
+      "dashboard": {
+        "title": "Ghostbusters AI Overview",
+        "panels": [
+          {
+            "title": "AI Agent Status",
+            "type": "stat",
+            "targets": [
+              {
+                "expr": "up{job=~\"ghostbusters-.*\"}",
+                "legendFormat": "{{job}}"
+              }
+            ]
+          },
+          {
+            "title": "Request Rate",
+            "type": "graph",
+            "targets": [
+              {
+                "expr": "rate(http_requests_total[5m])",
+                "legendFormat": "{{job}}"
+              }
+            ]
+          },
+          {
+            "title": "Response Time",
+            "type": "graph",
+            "targets": [
+              {
+                "expr": "histogram_quantile(0.95, rate(http_request_duration_seconds_bucket[5m]))",
+                "legendFormat": "{{job}}"
+              }
+            ]
+          },
+          {
+            "title": "Cost Metrics",
+            "type": "stat",
+            "targets": [
+              {
+                "expr": "ghostbusters_cost_daily_dollars",
+                "legendFormat": "Daily Cost"
+              }
+            ]
+          }
+        ]
+      }
+    }
+---
+# Grafana deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: grafana
+  namespace: ghostbusters-monitoring
+  labels:
+    app: grafana
+    component: monitoring
+    version: v10.0.0
+spec:
+  replicas: 1  # Single replica for cost control
+  selector:
+    matchLabels:
+      app: grafana
+  template:
+    metadata:
+      labels:
+        app: grafana
+        component: monitoring
+        version: v10.0.0
+    spec:
+      containers:
+      - name: grafana
+        image: grafana/grafana:10.0.0
+        ports:
+        - containerPort: 3000
+          name: http
+        env:
+        - name: GF_SECURITY_ADMIN_PASSWORD
+          value: "admin"  # Change in production
+        - name: GF_USERS_ALLOW_SIGN_UP
+          value: "false"
+        volumeMounts:
+        - name: grafana-dashboards
+          mountPath: /etc/grafana/provisioning/dashboards
+        - name: grafana-storage
+          mountPath: /var/lib/grafana
+        resources:
+          requests:
+            memory: "64Mi"     # Minimal resource requests
+            cpu: "50m"
+          limits:
+            memory: "128Mi"    # Reasonable resource limits
+            cpu: "100m"
+      volumes:
+      - name: grafana-dashboards
+        configMap:
+          name: grafana-dashboards
+      - name: grafana-storage
+        emptyDir: {}  # Use emptyDir for cost control
+---
+# Grafana service
+apiVersion: v1
+kind: Service
+metadata:
+  name: grafana
+  namespace: ghostbusters-monitoring
+  labels:
+    app: grafana
+    component: monitoring
+spec:
+  type: ClusterIP
+  ports:
+  - port: 3000
+    targetPort: 3000
+    name: http
+  selector:
+    app: grafana
+---
+# Cost monitoring alerts
+apiVersion: monitoring.googleapis.com/v1
+kind: AlertPolicy
+metadata:
+  name: ghostbusters-cost-alert
+  namespace: ghostbusters-monitoring
+  labels:
+    app: ghostbusters-cost-alert
+    component: monitoring
+spec:
+  displayName: "Ghostbusters Cost Alert"
+  documentation:
+    content: "Alert when Ghostbusters costs exceed thresholds"
+    mimeType: "text/markdown"
+  conditions:
+  - displayName: "Daily cost exceeds threshold"
+    conditionThreshold:
+      filter: 'resource.type="k8s_container" AND resource.labels.app=~"ghostbusters-.*"'
+      comparison: COMPARISON_GREATER_THAN
+      thresholdValue: 1.00  # $1/day threshold
+      duration: 300s        # 5 minutes
+      trigger:
+        count: 1
+  notificationChannels:
+  - name: "cost-alerts@example.com"  # Replace with actual email
+---
+# Resource usage alerts
+apiVersion: monitoring.googleapis.com/v1
+kind: AlertPolicy
+metadata:
+  name: ghostbusters-resource-alert
+  namespace: ghostbusters-monitoring
+  labels:
+    app: ghostbusters-resource-alert
+    component: monitoring
+spec:
+  displayName: "Ghostbusters Resource Usage Alert"
+  documentation:
+    content: "Alert when resource usage is high"
+    mimeType: "text/markdown"
+  conditions:
+  - displayName: "High CPU usage"
+    conditionThreshold:
+      filter: 'resource.type="k8s_container" AND resource.labels.app=~"ghostbusters-.*"'
+      comparison: COMPARISON_GREATER_THAN
+      thresholdValue: 80  # 80% CPU threshold
+      duration: 300s      # 5 minutes
+      trigger:
+        count: 1
+  - displayName: "High memory usage"
+    conditionThreshold:
+      filter: 'resource.type="k8s_container" AND resource.labels.app=~"ghostbusters-.*"'
+      comparison: COMPARISON_GREATER_THAN
+      thresholdValue: 85  # 85% memory threshold
+      duration: 300s      # 5 minutes
+      trigger:
+        count: 1
+  notificationChannels:
+  - name: "resource-alerts@example.com"  # Replace with actual email

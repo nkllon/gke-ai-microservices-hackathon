@@ -1,0 +1,121 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ghostbusters-config
+  namespace: ghostbusters-ai
+  labels:
+    app: ghostbusters-config
+    component: configuration
+data:
+  # Core configuration
+  environment: "development"
+  log_level: "INFO"
+  cost_monitoring_enabled: "true"
+  
+  # Orchestrator configuration
+  orchestrator:
+    max_concurrent_analyses: "5"
+    analysis_timeout_seconds: "300"
+    retry_attempts: "3"
+    health_check_interval: "30"
+  
+  # AI Agent configuration
+  ai_agents:
+    security:
+      max_concurrent_scans: "3"
+      scan_timeout_seconds: "120"
+      vulnerability_threshold: "medium"
+      auto_fix_enabled: "false"
+    
+    quality:
+      max_concurrent_analyses: "3"
+      analysis_timeout_seconds: "180"
+      quality_threshold: "75"
+      auto_fix_enabled: "false"
+    
+    test:
+      max_concurrent_analyses: "3"
+      analysis_timeout_seconds: "240"
+      coverage_threshold: "70"
+      auto_fix_enabled: "false"
+    
+    performance:
+      max_concurrent_analyses: "3"
+      analysis_timeout_seconds: "150"
+      performance_threshold: "80"
+      auto_fix_enabled: "false"
+  
+  # Cost control configuration
+  cost_control:
+    development_phase:
+      daily_threshold: "0.20"
+      weekly_threshold: "1.40"
+      monthly_threshold: "5.00"
+    
+    testing_phase:
+      daily_threshold: "0.50"
+      weekly_threshold: "3.50"
+      monthly_threshold: "15.00"
+    
+    demo_phase:
+      daily_threshold: "0.83"
+      weekly_threshold: "5.83"
+      monthly_threshold: "25.00"
+    
+    emergency_controls:
+      auto_scale_down_enabled: "true"
+      max_nodes: "3"
+      max_pods_per_service: "3"
+  
+  # Monitoring configuration
+  monitoring:
+    metrics_enabled: "true"
+    metrics_port: "9090"
+    health_check_enabled: "true"
+    health_check_port: "8080"
+    log_aggregation_enabled: "true"
+    cost_tracking_enabled: "true"
+  
+  # Integration configuration
+  integrations:
+    gke:
+      cluster_name: "ghostbusters-hackathon"
+      namespace: "ghostbusters-ai"
+      auto_scaling_enabled: "true"
+      cost_optimization_enabled: "true"
+    
+    tidb:
+      enabled: "false"
+      connection_string: ""
+      database_name: ""
+    
+    kiro:
+      enabled: "false"
+      plugin_path: ""
+      config_path: ""
+  
+  # Security configuration
+  security:
+    authentication_enabled: "false"
+    authorization_enabled: "false"
+    ssl_enabled: "false"
+    cors_enabled: "true"
+    rate_limiting_enabled: "true"
+    max_requests_per_minute: "100"
+  
+  # Performance configuration
+  performance:
+    cache_enabled: "true"
+    cache_ttl_seconds: "3600"
+    compression_enabled: "true"
+    gzip_enabled: "true"
+    connection_pooling_enabled: "true"
+    max_connections: "50"
+  
+  # Development configuration
+  development:
+    debug_mode: "true"
+    hot_reload_enabled: "false"
+    test_mode: "true"
+    mock_data_enabled: "true"
+    development_tools_enabled: "true"

@@ -1,0 +1,41 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: ghostbusters-ai
+  labels:
+    name: ghostbusters-ai
+    project: ghostbusters-hackathon
+    environment: development
+    cost-tier: development
+  annotations:
+    description: "Ghostbusters AI Agent Microservices for Hackathon"
+    cost-center: "hackathon"
+    auto-shutdown: "true"
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: ghostbusters-monitoring
+  labels:
+    name: ghostbusters-monitoring
+    project: ghostbusters-hackathon
+    environment: development
+    cost-tier: development
+  annotations:
+    description: "Monitoring and observability for Ghostbusters AI"
+    cost-center: "hackathon"
+    auto-shutdown: "true"
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: ghostbusters-ingress
+  labels:
+    name: ghostbusters-ingress
+    project: ghostbusters-hackathon
+    environment: development
+    cost-tier: development
+  annotations:
+    description: "Ingress and load balancing for Ghostbusters AI"
+    cost-center: "hackathon"
+    auto-shutdown: "true"
