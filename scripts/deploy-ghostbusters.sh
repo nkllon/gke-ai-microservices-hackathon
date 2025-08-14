@@ -2,6 +2,18 @@
 
 # 🚀 Ghostbusters AI Microservices Deployment Script
 # GKE Hackathon Implementation
+#
+# Dependencies:
+# - gcloud CLI (Google Cloud SDK)
+# - kubectl (Kubernetes CLI) - install via: gcloud components install kubectl --quiet
+# - Docker (for container operations)
+#
+# Prerequisites:
+# - GCP project created and configured
+# - Required APIs enabled
+# - User authenticated and authorized
+#
+# See GKE_DEPLOYMENT_DEPENDENCIES.md for detailed setup instructions
 
 set -e  # Exit on any error
 
@@ -50,20 +62,76 @@ check_prerequisites() {
     # Check if gcloud is installed
     if ! command -v gcloud &> /dev/null; then
         print_error "gcloud CLI is not installed. Please install it first."
+        print_info "Installation: curl https://sdk.cloud.google.com | bash"
         exit 1
     fi
+    
+    # Check gcloud version
+    GCLOUD_VERSION=$(gcloud version --format="value(Google Cloud SDK)")
+    print_info "gcloud version: $GCLOUD_VERSION"
     
     # Check if kubectl is installed
     if ! command -v kubectl &> /dev/null; then
         print_error "kubectl is not installed. Please install it first."
+        print_info "Installation: gcloud components install kubectl --quiet"
         exit 1
     fi
+    
+    # Check kubectl version
+    KUBECTL_VERSION=$(kubectl version --client --output=yaml | grep gitVersion | cut -d' ' -f4)
+    print_info "kubectl version: $KUBECTL_VERSION"
     
     # Check if docker is installed
     if ! command -v docker &> /dev/null; then
         print_error "Docker is not installed. Please install it first."
+        print_info "Installation: sudo apt-get install docker.io (Ubuntu/Debian)"
         exit 1
     fi
+    
+    # Check docker version
+    DOCKER_VERSION=$(docker --version)
+    print_info "Docker: $DOCKER_VERSION"
+    
+    # Check if user is authenticated
+    if ! gcloud auth list --filter=status:ACTIVE --format="value(account)" | grep -q .; then
+        print_error "Not authenticated with gcloud. Please run 'gcloud auth login' first."
+        exit 1
+    fi
+    
+    # Check if project is set
+    CURRENT_PROJECT=$(gcloud config get-value project 2>/dev/null)
+    if [ "$CURRENT_PROJECT" != "$PROJECT_ID" ]; then
+        print_warning "Current project is '$CURRENT_PROJECT', expected '$PROJECT_ID'"
+        print_info "Setting project to $PROJECT_ID..."
+        gcloud config set project $PROJECT_ID
+    fi
+    
+    # Check if project exists and is accessible
+    if ! gcloud projects describe $PROJECT_ID &> /dev/null; then
+        print_error "Project $PROJECT_ID not found or not accessible"
+        exit 1
+    fi
+    
+    # Check if required APIs are enabled
+    print_info "Verifying required APIs are enabled..."
+    REQUIRED_APIS=(
+        "container.googleapis.com"
+        "compute.googleapis.com"
+        "monitoring.googleapis.com"
+        "logging.googleapis.com"
+        "cloudresourcemanager.googleapis.com"
+        "iam.googleapis.com"
+    )
+    
+    for api in "${REQUIRED_APIS[@]}"; do
+        if gcloud services list --enabled --project=$PROJECT_ID --filter="name:$api" | grep -q "$api"; then
+            print_status "API enabled: $api"
+        else
+            print_error "Required API not enabled: $api"
+            print_info "Enable with: gcloud services enable $api --project=$PROJECT_ID"
+            exit 1
+        fi
+    done
     
     print_status "All prerequisites are satisfied"
 }
