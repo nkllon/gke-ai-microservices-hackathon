@@ -4,11 +4,14 @@
 
 **🏆 Prizes:** $50,000 in cash  
 **📅 Dates:** August 18 – September 22, 2025  
-**⏰ Deadline:** September 22, 2025
+**⏰ Deadline:** September 22, 2025  
+**🌐 Devpost:** [GKE Turns 10 Hackathon](https://gketurns10.devpost.com/) *(Check for specific requirements)*
 
 ## 🚀 Project Overview
 
 This repository contains our submission for the GKE Turns 10 Hackathon, showcasing AI agent microservices built with Kubernetes and Google Cloud Platform.
+
+**🏆 Key Goal:** Demonstrate next-generation microservices architecture with AI agents on Google Kubernetes Engine.
 
 ## 🏗️ Architecture Components
 
@@ -36,22 +39,22 @@ This repository contains our submission for the GKE Turns 10 Hackathon, showcasi
 ```
 gke-ai-microservices-hackathon/
 ├── src/
-│   ├── ai_agents/           # AI agent microservices
-│   ├── kubernetes/          # GKE deployment manifests
-│   ├── cloud_functions/     # GCP Cloud Functions
-│   └── api/                 # FastAPI microservice
+│   ├── ai_agents/              # AI agent microservices
+│   ├── kubernetes/              # GKE deployment manifests
+│   ├── cloud_functions/         # GCP Cloud Functions
+│   └── api/                     # FastAPI microservice
 ├── infrastructure/
-│   ├── terraform/           # Infrastructure as Code
-│   ├── helm/                # Kubernetes Helm charts
-│   └── cloud_build/         # CI/CD pipelines
+│   ├── terraform/               # Infrastructure as Code
+│   ├── helm/                    # Kubernetes Helm charts
+│   └── cloud_build/             # CI/CD pipelines
 ├── docs/
-│   ├── architecture.md      # System architecture
-│   ├── deployment.md        # Deployment guide
-│   └── api_reference.md     # API documentation
+│   ├── architecture.md          # System architecture
+│   ├── deployment.md            # Deployment guide
+│   └── api_reference.md         # API documentation
 └── tests/
-    ├── unit/                # Unit tests
-    ├── integration/         # Integration tests
-    └── e2e/                 # End-to-end tests
+    ├── unit/                    # Unit tests
+    ├── integration/             # Integration tests
+    └── e2e/                     # End-to-end tests
 ```
 
 ## 🚀 Quick Start
@@ -117,6 +120,72 @@ pytest tests/e2e/ -v
 - Real-time monitoring and scaling
 - Comprehensive testing suite
 
+## 🌟 Key Features
+
+### AI Agent Microservices
+- **Multi-Agent Orchestration** - Intelligent agent coordination
+- **Real-Time Processing** - Live AI agent interactions
+- **Scalable Architecture** - Auto-scaling microservices
+- **GKE Integration** - Native Kubernetes deployment
+
+### Cloud-Native Architecture
+- **Serverless Functions** - GCP Cloud Functions integration
+- **Container Orchestration** - Kubernetes-native design
+- **Infrastructure as Code** - Terraform and Helm automation
+- **CI/CD Pipeline** - Automated deployment and testing
+
+### Production Ready
+- **Monitoring & Logging** - Cloud Monitoring integration
+- **Security & Compliance** - GCP security best practices
+- **Performance Optimization** - Optimized for production workloads
+- **Disaster Recovery** - High availability and backup strategies
+
+## 🏆 Hackathon Requirements
+
+### **What to Build:**
+Build next-generation microservices with AI agents that demonstrate:
+- **AI Agent Integration** - Intelligent microservice orchestration
+- **Kubernetes Native** - GKE-optimized deployment
+- **Cloud Functions** - Serverless AI processing
+- **Real-World Applications** - Practical business use cases
+
+### **Key Focus Areas:**
+- **AI Agent Microservices** - Beyond traditional microservices
+- **GKE Integration** - Leverage Google Cloud Platform features
+- **Production Deployment** - Deployable, scalable solutions
+- **Innovation** - Showcase next-generation architecture
+
+## 📋 Submission Requirements
+
+### **Required Components:**
+1. **Working AI Agent Microservice** on GKE
+2. **Demonstration Video** showing the application in action
+3. **Public Repository** with open source license
+4. **Deployment Instructions** for GKE
+5. **Architecture Documentation** explaining the design
+6. **Performance Metrics** and scalability demonstration
+
+### **Technical Requirements:**
+- **GKE Deployment** - Must run on Google Kubernetes Engine
+- **AI Agent Integration** - Demonstrate intelligent agent orchestration
+- **Microservices Architecture** - Multiple coordinated services
+- **Cloud Functions** - GCP serverless integration
+- **Production Ready** - Scalable, monitored, secure
+
+## 🎯 Use Cases
+
+### **AI-Powered Applications:**
+- **Intelligent APIs** - AI-enhanced microservice endpoints
+- **Agent Orchestration** - Multi-agent workflow coordination
+- **Real-Time Processing** - Live AI agent interactions
+- **Smart Routing** - Intelligent request routing and processing
+
+### **Business Applications:**
+- **Customer Service** - AI-powered support microservices
+- **Data Processing** - Intelligent data pipeline orchestration
+- **Content Management** - AI-enhanced content processing
+- **Analytics** - Real-time AI-powered analytics
+
 ## 🤝 Contributing
 
 This is a hackathon submission repository. For questions or collaboration, please contact the team.
@@ -128,3 +197,9 @@ MIT License - see [LICENSE](LICENSE) file for details.
 ---
 
 **Built with ❤️ for the GKE Turns 10 Hackathon**
+
+**🏆 Total Prize Pool: $50,000**
+**⏰ Deadline: September 22, 2025**
+**🎯 Focus: Next-generation AI agent microservices on GKE**
+
+**⚠️ Note: Check the [GKE Devpost page](https://gketurns10.devpost.com/) for complete and up-to-date requirements.**
