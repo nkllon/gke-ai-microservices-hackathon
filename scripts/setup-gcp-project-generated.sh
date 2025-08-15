@@ -84,20 +84,20 @@ check_prerequisites() {
 
 # Create new GCP project
 create_gcp_project() {
-    print_info "Creating new GCP project: $PROJECT_ID"
+    print_info "Creating new GCP project: "PROJECT_I"D"
     
     # Check if project already exists
-    if gcloud projects describe $PROJECT_ID &> /dev/null; then
-        print_warning "Project $PROJECT_ID already exists"
+    if gcloud projects describe "PROJECT_I"D &> /dev/null; then
+        print_warning "Project "PROJECT_I"D already exists"
         return
     fi
     
     # Create new project
-    gcloud projects create $PROJECT_ID \
-        --name="$PROJECT_NAME" \
+    gcloud projects create "PROJECT_I"D \
+        --name=""PROJECT_NAM"E" \
         --set-as-default
     
-    print_status "GCP project created successfully: $PROJECT_ID"
+    print_status "GCP project created successfully: "PROJECT_I"D"
 }
 
 # Set billing account
@@ -105,13 +105,13 @@ setup_billing() {
     print_info "Setting up billing account..."
     
     # Link billing account
-    gcloud billing projects link $PROJECT_ID \
-        --billing-account=$BILLING_ACCOUNT
+    gcloud billing projects link "PROJECT_I"D \
+        --billing-account="BILLING_ACCOUN"T
     
     # Verify billing link
-    BILLING_STATUS=$(gcloud billing projects describe $PROJECT_ID --format="value(billingEnabled)")
+    BILLING_STATUS=$(gcloud billing projects describe "PROJECT_I"D --format="value(billingEnabled)")
     
-    if [ "$BILLING_STATUS" = "True" ]; then
+    if [ ""BILLING_STATU"S" = "True" ]; then
         print_status "Billing account linked successfully"
     else
         print_error "Failed to link billing account"
@@ -124,9 +124,9 @@ enable_required_apis() {
     print_info "Enabling required APIs..."
     
     for api in "${REQUIRED_APIS[@]}"; do
-        print_info "Enabling API: $api"
-        gcloud services enable $api --project=$PROJECT_ID
-        print_status "API enabled: $api"
+        print_info "Enabling API: "ap"i"
+        gcloud services enable "ap"i --project="PROJECT_I"D
+        print_status "API enabled: "ap"i"
     done
     
     print_status "All required APIs enabled successfully"
@@ -137,14 +137,14 @@ verify_api_exclusions() {
     print_info "Verifying API exclusions..."
     
     # Get list of enabled APIs
-    ENABLED_APIS=$(gcloud services list --enabled --project=$PROJECT_ID --format="value(name)")
+    ENABLED_APIS=$(gcloud services list --enabled --project="PROJECT_I"D --format="value(name)")
     
     # Check for any excluded APIs that might be enabled
     for api in "${EXCLUDED_APIS[@]}"; do
-        if echo "$ENABLED_APIS" | grep -q "$api"; then
-            print_warning "WARNING: Excluded API $api is enabled - this may cause unwanted costs!"
+        if echo ""ENABLED_API"S" | grep -q ""ap"i"; then
+            print_warning "WARNING: Excluded API "ap"i is enabled - this may cause unwanted costs!"
         else
-            print_status "Excluded API $api is correctly disabled"
+            print_status "Excluded API "ap"i is correctly disabled"
         fi
     done
 }
@@ -155,9 +155,9 @@ setup_cost_control() {
     
     # Create project budget
     gcloud billing budgets create \
-        --billing-account=$BILLING_ACCOUNT \
-        --budget-amount=$MONTHLY_BUDGET \
-        --budget-filter="project=$PROJECT_ID" \
+        --billing-account="BILLING_ACCOUN"T \
+        --budget-amount="MONTHLY_BUDGE"T \
+        --budget-filter="project="PROJECT_I"D" \
         --display-name="Ghostbusters Hackathon 2025 Budget"
     
     print_status "Budget created: $${MONTHLY_BUDGET}/month"
@@ -172,26 +172,26 @@ verify_project_setup() {
     echo "================================"
     
     # Check project status
-    PROJECT_STATUS=$(gcloud projects describe $PROJECT_ID --format="value(lifecycleState)")
-    echo "Project Status: $PROJECT_STATUS"
+    PROJECT_STATUS=$(gcloud projects describe "PROJECT_I"D --format="value(lifecycleState)")
+    echo "Project Status: "PROJECT_STATU"S"
     
     # Check billing status
-    BILLING_STATUS=$(gcloud billing projects describe $PROJECT_ID --format="value(billingEnabled)")
-    echo "Billing Status: $BILLING_STATUS"
+    BILLING_STATUS=$(gcloud billing projects describe "PROJECT_I"D --format="value(billingEnabled)")
+    echo "Billing Status: "BILLING_STATU"S"
     
     # Count enabled APIs
-    ENABLED_API_COUNT=$(gcloud services list --enabled --project=$PROJECT_ID --format="value(name)" | wc -l)
-    echo "Enabled APIs: $ENABLED_API_COUNT"
+    ENABLED_API_COUNT=$(gcloud services list --enabled --project="PROJECT_I"D --format="value(name)" | wc -l)
+    echo "Enabled APIs: "ENABLED_API_COUN"T"
     
     # List enabled APIs
     echo ""
     echo "Enabled APIs:"
-    gcloud services list --enabled --project=$PROJECT_ID --format="table(name,title)" | head -10
+    gcloud services list --enabled --project="PROJECT_I"D --format="table(name,title)" | head -10
     
     # Check budget
     echo ""
     echo "Budget Configuration:"
-    gcloud billing budgets list --billing-account=$BILLING_ACCOUNT --filter="displayName:2025"
+    gcloud billing budgets list --billing-account="BILLING_ACCOUN"T --filter="displayName:2025"
     
     print_status "Project setup verification completed"
 }
@@ -204,7 +204,8 @@ update_tracking_file() {
     sed -i "s/❌ Project Creation - Not started/✅ Project Creation - Completed $(date +%Y-%m-%d)/" PROJECT_SETUP_TRACKING.md
     sed -i "s/❌ Billing Setup - Not started/✅ Billing Setup - Completed $(date +%Y-%m-%d)/" PROJECT_SETUP_TRACKING.md
     sed -i "s/❌ API Enablement - Not started/✅ API Enablement - Completed $(date +%Y-%m-%d)/" PROJECT_SETUP_TRACKING.md
-    sed -i "s/❌ Cost Control Configuration - Not started/✅ Cost Control Configuration - Completed $(date +%Y-%m-%d)/" PROJECT_SETUP_TRACKING.md
+    sed -i "s/❌ Cost Control Configuration - Not started/✅ Cost Control Configuration - Completed \
+    $(date +%Y-%m-%d)/" PROJECT_SETUP_TRACKING.md
     
     # Update setup status
     sed -i "s/Status: 🔄 SETUP IN PROGRESS/Status: ✅ SETUP COMPLETED/" PROJECT_SETUP_TRACKING.md
@@ -218,9 +219,9 @@ show_next_steps() {
     echo ""
     echo "🎯 Project Setup Complete!"
     echo "=========================="
-    echo "✅ GCP Project: $PROJECT_ID"
-    echo "✅ Project Name: $PROJECT_NAME"
-    echo "✅ Billing Account: $BILLING_ACCOUNT"
+    echo "✅ GCP Project: "PROJECT_I"D"
+    echo "✅ Project Name: "PROJECT_NAM"E"
+    echo "✅ Billing Account: "BILLING_ACCOUN"T"
     echo "✅ Required APIs: ${#REQUIRED_APIS[@]} enabled"
     echo "✅ Excluded APIs: ${#REQUIRED_APIS[@]} disabled"
     echo "✅ Cost Control: $${MONTHLY_BUDGET}/month budget"
@@ -229,8 +230,8 @@ show_next_steps() {
     echo ""
     echo "Next Commands:"
     echo "1. Deploy to GKE: ./scripts/deploy-ghostbusters.sh"
-    echo "2. Check costs: gcloud billing reports list --project=$PROJECT_ID"
-    echo "3. Monitor APIs: gcloud services list --enabled --project=$PROJECT_ID"
+    echo "2. Check costs: gcloud billing reports list --project="PROJECT_I"D"
+    echo "3. Monitor APIs: gcloud services list --enabled --project="PROJECT_I"D"
     echo ""
     echo "💰 Cost Control Active:"
     echo "   - Development Phase: <$${DEVELOPMENT_PHASE}/month"
@@ -257,7 +258,7 @@ main() {
     echo ""
     print_status "🎉 GCP project setup completed successfully!"
     echo ""
-    print_info "Project $PROJECT_ID is ready for Ghostbusters AI deployment!"
+    print_info "Project "PROJECT_I"D is ready for Ghostbusters AI deployment!"
     print_info "All required APIs are enabled, excluded APIs are disabled."
     print_info "Cost control is configured with $${MONTHLY_BUDGET}/month budget."
     echo ""

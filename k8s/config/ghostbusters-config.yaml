@@ -13,109 +13,90 @@ data:
   cost_monitoring_enabled: "true"
   
   # Orchestrator configuration
-  orchestrator:
-    max_concurrent_analyses: "5"
-    analysis_timeout_seconds: "300"
-    retry_attempts: "3"
-    health_check_interval: "30"
+  orchestrator.max_concurrent_analyses: "5"
+  orchestrator.analysis_timeout_seconds: "300"
+  orchestrator.retry_attempts: "3"
+  orchestrator.health_check_interval: "30"
   
   # AI Agent configuration
-  ai_agents:
-    security:
-      max_concurrent_scans: "3"
-      scan_timeout_seconds: "120"
-      vulnerability_threshold: "medium"
-      auto_fix_enabled: "false"
-    
-    quality:
-      max_concurrent_analyses: "3"
-      analysis_timeout_seconds: "180"
-      quality_threshold: "75"
-      auto_fix_enabled: "false"
-    
-    test:
-      max_concurrent_analyses: "3"
-      analysis_timeout_seconds: "240"
-      coverage_threshold: "70"
-      auto_fix_enabled: "false"
-    
-    performance:
-      max_concurrent_analyses: "3"
-      analysis_timeout_seconds: "150"
-      performance_threshold: "80"
-      auto_fix_enabled: "false"
+  ai_agents.security.max_concurrent_scans: "3"
+  ai_agents.security.scan_timeout_seconds: "120"
+  ai_agents.security.vulnerability_threshold: "medium"
+  ai_agents.security.auto_fix_enabled: "false"
+  
+  ai_agents.quality.max_concurrent_analyses: "3"
+  ai_agents.quality.analysis_timeout_seconds: "180"
+  ai_agents.quality.quality_threshold: "75"
+  ai_agents.quality.auto_fix_enabled: "false"
+  
+  ai_agents.test.max_concurrent_analyses: "3"
+  ai_agents.test.analysis_timeout_seconds: "240"
+  ai_agents.test.coverage_threshold: "70"
+  ai_agents.test.auto_fix_enabled: "false"
+  
+  ai_agents.performance.max_concurrent_analyses: "3"
+  ai_agents.performance.analysis_timeout_seconds: "150"
+  ai_agents.performance.performance_threshold: "80"
+  ai_agents.performance.auto_fix_enabled: "false"
   
   # Cost control configuration
-  cost_control:
-    development_phase:
-      daily_threshold: "0.20"
-      weekly_threshold: "1.40"
-      monthly_threshold: "5.00"
-    
-    testing_phase:
-      daily_threshold: "0.50"
-      weekly_threshold: "3.50"
-      monthly_threshold: "15.00"
-    
-    demo_phase:
-      daily_threshold: "0.83"
-      weekly_threshold: "5.83"
-      monthly_threshold: "25.00"
-    
-    emergency_controls:
-      auto_scale_down_enabled: "true"
-      max_nodes: "3"
-      max_pods_per_service: "3"
+  cost_control.development_phase.daily_threshold: "0.20"
+  cost_control.development_phase.weekly_threshold: "1.40"
+  cost_control.development_phase.monthly_threshold: "5.00"
+  
+  cost_control.testing_phase.daily_threshold: "0.50"
+  cost_control.testing_phase.weekly_threshold: "3.50"
+  cost_control.testing_phase.monthly_threshold: "15.00"
+  
+  cost_control.demo_phase.daily_threshold: "0.83"
+  cost_control.demo_phase.weekly_threshold: "5.83"
+  cost_control.demo_phase.monthly_threshold: "25.00"
+  
+  cost_control.emergency_controls.auto_scale_down_enabled: "true"
+  cost_control.emergency_controls.max_nodes: "3"
+  cost_control.emergency_controls.max_pods_per_service: "3"
   
   # Monitoring configuration
-  monitoring:
-    metrics_enabled: "true"
-    metrics_port: "9090"
-    health_check_enabled: "true"
-    health_check_port: "8080"
-    log_aggregation_enabled: "true"
-    cost_tracking_enabled: "true"
+  monitoring.metrics_enabled: "true"
+  monitoring.metrics_port: "9090"
+  monitoring.health_check_enabled: "true"
+  monitoring.health_check_port: "8080"
+  monitoring.log_aggregation_enabled: "true"
+  monitoring.cost_tracking_enabled: "true"
   
   # Integration configuration
-  integrations:
-    gke:
-      cluster_name: "ghostbusters-hackathon"
-      namespace: "ghostbusters-ai"
-      auto_scaling_enabled: "true"
-      cost_optimization_enabled: "true"
-    
-    tidb:
-      enabled: "false"
-      connection_string: ""
-      database_name: ""
-    
-    kiro:
-      enabled: "false"
-      plugin_path: ""
-      config_path: ""
+  integrations.gke.cluster_name: "ghostbusters-hackathon"
+  integrations.gke.namespace: "ghostbusters-ai"
+  integrations.gke.auto_scaling_enabled: "true"
+  integrations.gke.cost_optimization_enabled: "true"
+  
+  integrations.tidb.enabled: "false"
+  integrations.tidb.connection_string: ""
+  integrations.tidb.database_name: ""
+  
+  integrations.kiro.enabled: "false"
+  integrations.kiro.plugin_path: ""
+  integrations.kiro.config_path: ""
   
   # Security configuration
-  security:
-    authentication_enabled: "false"
-    authorization_enabled: "false"
-    ssl_enabled: "false"
-    cors_enabled: "true"
-    rate_limiting_enabled: "true"
-    max_requests_per_minute: "100"
+  security.authentication_enabled: "false"
+  security.authorization_enabled: "false"
+  security.ssl_enabled: "false"
+  security.cors_enabled: "true"
+  security.rate_limiting_enabled: "true"
+  security.max_requests_per_minute: "100"
   
   # Performance configuration
-  performance:
-    cache_enabled: "true"
-    cache_ttl_seconds: "3600"
-    compression_enabled: "true"
-    gzip_enabled: "true"
-    connection_pooling_enabled: "true"
-    max_connections: "50"
+  performance.cache_enabled: "true"
+  performance.cache_ttl_seconds: "3600"
+  performance.compression_enabled: "true"
+  performance.gzip_enabled: "true"
+  performance.connection_pooling_enabled: "true"
+  performance.max_connections: "50"
   
   # Development configuration
-  development:
-    debug_mode: "true"
-    hot_reload_enabled: "false"
-    test_mode: "true"
-    mock_data_enabled: "true"
-    development_tools_enabled: "true"
+  development.debug_mode: "true"
+  development.hot_reload_enabled: "false"
+  development.test_mode: "true"
+  development.mock_data_enabled: "true"
+  development.development_tools_enabled: "true"

@@ -63,11 +63,11 @@ print_info() {
 
 # Confirmation prompt
 confirm_teardown() {
-    echo -e "${RED}Are you absolutely sure you want to delete project $PROJECT_ID?${NC}"
+    echo -e "${RED}Are you absolutely sure you want to delete project "PROJECT_ID"?${NC}"
     echo -e "${RED}Type 'DELETE' to confirm:${NC}"
     read -r confirmation
     
-    if [ "$confirmation" != "DELETE" ]; then
+    if [ ""confirmatio"n" != "DELETE" ]; then
         print_warning "Teardown cancelled by user"
         exit 0
     fi
@@ -92,8 +92,8 @@ check_prerequisites() {
     fi
     
     # Check if project exists
-    if ! gcloud projects describe $PROJECT_ID &> /dev/null; then
-        print_error "Project $PROJECT_ID does not exist"
+    if ! gcloud projects describe "PROJECT_I"D &> /dev/null; then
+        print_error "Project "PROJECT_I"D does not exist"
         exit 1
     fi
     
@@ -105,17 +105,17 @@ disable_all_apis() {
     print_info "Disabling all enabled APIs..."
     
     # Get list of enabled APIs
-    ENABLED_APIS=$(gcloud services list --enabled --project=$PROJECT_ID --format="value(name)")
+    ENABLED_APIS=$(gcloud services list --enabled --project="PROJECT_I"D --format="value(name)")
     
-    if [ -z "$ENABLED_APIS" ]; then
+    if [ -z ""ENABLED_API"S" ]; then
         print_warning "No APIs enabled in project"
         return
     fi
     
     # Disable each API
-    for api in $ENABLED_APIS; do
-        print_info "Disabling API: $api"
-        gcloud services disable $api --project=$PROJECT_ID --quiet || print_warning "Failed to disable $api"
+    for api in "ENABLED_APIS"; do
+        print_info "Disabling API: "ap"i"
+        gcloud services disable "ap"i --project="PROJECT_I"D --quiet || print_warning "Failed to disable "ap"i"
     done
     
     print_status "All APIs disabled"
@@ -126,20 +126,21 @@ delete_gke_clusters() {
     print_info "Checking for GKE clusters..."
     
     # List all clusters
-    CLUSTERS=$(gcloud container clusters list --project=$PROJECT_ID --format="value(name,location)" 2>/dev/null || echo "")
+    CLUSTERS=$(gcloud container clusters list --project="PROJECT_I"D --format="value(name,location)" 2>/dev/null || echo "")
     
-    if [ -n "$CLUSTERS" ]; then
+    if [ -n ""CLUSTER"S" ]; then
         print_warning "Found GKE clusters. Deleting..."
         
         while IFS= read -r cluster_info; do
-            if [ -n "$cluster_info" ]; then
-                CLUSTER_NAME=$(echo "$cluster_info" | cut -d' ' -f1)
-                LOCATION=$(echo "$cluster_info" | cut -d' ' -f2)
+            if [ -n ""cluster_inf"o" ]; then
+                CLUSTER_NAME=$(echo ""cluster_inf"o" | cut -d' ' -f1)
+                LOCATION=$(echo ""cluster_inf"o" | cut -d' ' -f2)
                 
-                print_info "Deleting cluster: $CLUSTER_NAME in $LOCATION"
-                gcloud container clusters delete $CLUSTER_NAME --location=$LOCATION --project=$PROJECT_ID --quiet || print_warning "Failed to delete cluster $CLUSTER_NAME"
+                print_info "Deleting cluster: "CLUSTER_NAM"E in "LOCATIO"N"
+                gcloud container clusters delete "CLUSTER_NAM"E --location="LOCATIO"N --project="PROJECT_I"D --quiet || \
+    print_warning "Failed to delete cluster $CLUSTER_NAME"
             fi
-        done <<< "$CLUSTERS"
+        done <<< ""CLUSTER"S"
     else
         print_status "No GKE clusters found"
     fi
@@ -150,20 +151,21 @@ delete_compute_instances() {
     print_info "Checking for compute instances..."
     
     # List all instances
-    INSTANCES=$(gcloud compute instances list --project=$PROJECT_ID --format="value(name,zone)" 2>/dev/null || echo "")
+    INSTANCES=$(gcloud compute instances list --project="PROJECT_I"D --format="value(name,zone)" 2>/dev/null || echo "")
     
-    if [ -n "$INSTANCES" ]; then
+    if [ -n ""INSTANCE"S" ]; then
         print_warning "Found compute instances. Deleting..."
         
         while IFS= read -r instance_info; do
-            if [ -n "$instance_info" ]; then
-                INSTANCE_NAME=$(echo "$instance_info" | cut -d' ' -f1)
-                ZONE=$(echo "$instance_info" | cut -d' ' -f2)
+            if [ -n ""instance_inf"o" ]; then
+                INSTANCE_NAME=$(echo ""instance_inf"o" | cut -d' ' -f1)
+                ZONE=$(echo ""instance_inf"o" | cut -d' ' -f2)
                 
-                print_info "Deleting instance: $INSTANCE_NAME in $ZONE"
-                gcloud compute instances delete $INSTANCE_NAME --zone=$ZONE --project=$PROJECT_ID --quiet || print_warning "Failed to delete instance $INSTANCE_NAME"
+                print_info "Deleting instance: "INSTANCE_NAM"E in "ZON"E"
+                gcloud compute instances delete "INSTANCE_NAM"E --zone="ZON"E --project="PROJECT_I"D --quiet || \
+    print_warning "Failed to delete instance $INSTANCE_NAME"
             fi
-        done <<< "$INSTANCES"
+        done <<< ""INSTANCE"S"
     else
         print_status "No compute instances found"
     fi
@@ -174,15 +176,15 @@ delete_storage_buckets() {
     print_info "Checking for storage buckets..."
     
     # List all buckets
-    BUCKETS=$(gsutil ls -p $PROJECT_ID 2>/dev/null || echo "")
+    BUCKETS=$(gsutil ls -p "PROJECT_I"D 2>/dev/null || echo "")
     
-    if [ -n "$BUCKETS" ]; then
+    if [ -n ""BUCKET"S" ]; then
         print_warning "Found storage buckets. Deleting..."
         
-        for bucket in $BUCKETS; do
-            if [ -n "$bucket" ]; then
-                print_info "Deleting bucket: $bucket"
-                gsutil -m rm -r $bucket || print_warning "Failed to delete bucket $bucket"
+        for bucket in "BUCKETS"; do
+            if [ -n ""bucke"t" ]; then
+                print_info "Deleting bucket: "bucke"t"
+                gsutil -m rm -r "bucke"t || print_warning "Failed to delete bucket "bucke"t"
             fi
         done
     else
@@ -195,13 +197,14 @@ delete_budgets() {
     print_info "Deleting project budgets..."
     
     # List budgets for this project
-    BUDGETS=$(gcloud billing budgets list --billing-account=$BILLING_ACCOUNT --filter="displayName:2025" --format="value(name)" 2>/dev/null || echo "")
+    BUDGETS=$(gcloud billing budgets list --billing-account="BILLING_ACCOUN"T --filter="displayName:2025" --format="value(name)" 2>/dev/null || \
+    echo "")
     
-    if [ -n "$BUDGETS" ]; then
-        for budget in $BUDGETS; do
-            if [ -n "$budget" ]; then
-                print_info "Deleting budget: $budget"
-                gcloud billing budgets delete $budget --quiet || print_warning "Failed to delete budget $budget"
+    if [ -n ""BUDGET"S" ]; then
+        for budget in "BUDGETS"; do
+            if [ -n ""budge"t" ]; then
+                print_info "Deleting budget: "budge"t"
+                gcloud billing budgets delete "budge"t --quiet || print_warning "Failed to delete budget "budge"t"
             fi
         done
     else
@@ -214,19 +217,19 @@ unlink_billing() {
     print_info "Unlinking billing account..."
     
     # Unlink billing account
-    gcloud billing projects unlink $PROJECT_ID --quiet || print_warning "Failed to unlink billing account"
+    gcloud billing projects unlink "PROJECT_I"D --quiet || print_warning "Failed to unlink billing account"
     
     print_status "Billing account unlinked"
 }
 
 # Delete the project
 delete_project() {
-    print_info "Deleting project $PROJECT_ID..."
+    print_info "Deleting project "PROJECT_ID"..."
     
     # Delete the project
-    gcloud projects delete $PROJECT_ID --quiet
+    gcloud projects delete "PROJECT_I"D --quiet
     
-    print_status "Project $PROJECT_ID deleted successfully"
+    print_status "Project "PROJECT_I"D deleted successfully"
 }
 
 # Update tracking file
@@ -239,7 +242,8 @@ update_tracking_file() {
         sed -i "s/✅ Project Creation - Completed.*/❌ Project Creation - Deleted $(date +%Y-%m-%d)/" PROJECT_SETUP_TRACKING.md
         sed -i "s/✅ Billing Setup - Completed.*/❌ Billing Setup - Removed $(date +%Y-%m-%d)/" PROJECT_SETUP_TRACKING.md
         sed -i "s/✅ API Enablement - Completed.*/❌ API Enablement - Disabled $(date +%Y-%m-%d)/" PROJECT_SETUP_TRACKING.md
-        sed -i "s/✅ Cost Control Configuration - Completed.*/❌ Cost Control Configuration - Removed $(date +%Y-%m-%d)/" PROJECT_SETUP_TRACKING.md
+        sed -i "s/✅ Cost Control Configuration - Completed.*/❌ Cost Control Configuration - Removed \
+    $(date +%Y-%m-%d)/" PROJECT_SETUP_TRACKING.md
         
         print_status "Project tracking updated"
     else
@@ -251,8 +255,8 @@ update_tracking_file() {
 show_teardown_summary() {
     print_info "Teardown Summary:"
     echo ""
-    echo "🗑️  Project Deleted: $PROJECT_ID"
-    echo "🗑️  Project Name: $PROJECT_NAME"
+    echo "🗑️  Project Deleted: "PROJECT_I"D"
+    echo "🗑️  Project Name: "PROJECT_NAM"E"
     echo "🗑️  Billing Account: Unlinked"
     echo "🗑️  All APIs: Disabled"
     echo "🗑️  All Resources: Deleted"
@@ -284,7 +288,7 @@ main() {
     echo ""
     print_status "🎉 GCP project teardown completed successfully!"
     echo ""
-    print_info "Project $PROJECT_ID has been completely removed."
+    print_info "Project "PROJECT_I"D has been completely removed."
     print_info "All resources, services, and billing have been cleaned up."
     echo ""
     print_warning "Remember: This project was specifically for the 2025 hackathon!"

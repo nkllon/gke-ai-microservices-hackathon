@@ -95,9 +95,12 @@ class GKECostMonitor:
                 "status": cluster_info.get("status"),
                 "node_count": cluster_info.get("currentNodeCount", 0),
                 "node_pools": len(cluster_info.get("nodePools", [])),
-                "machine_type": cluster_info.get("nodePools", [{}])[0].get("config", {}).get("machineType", "unknown"),
-                "disk_size_gb": cluster_info.get("nodePools", [{}])[0].get("config", {}).get("diskSizeGb", 0),
-                "preemptible": cluster_info.get("nodePools", [{}])[0].get("config", {}).get("preemptible", False)
+                "machine_type": cluster_info.get( \
+    "nodePools", [{}])[0].get("config", {}).get("machineType", "unknown"),
+                "disk_size_gb": cluster_info.get( \
+    "nodePools", [{}])[0].get("config", {}).get("diskSizeGb", 0),
+                "preemptible": cluster_info.get( \
+    "nodePools", [{}])[0].get("config", {}).get("preemptible", False)
             }
         except Exception as e:
             print(f"❌ Failed to get cluster status: {e}")
@@ -161,8 +164,10 @@ class GKECostMonitor:
                 "failed_pods": failed_pods,
                 "total_cpu_millicores": total_cpu,
                 "total_memory_mi": total_memory,
-                "cpu_utilization_percent": min(100, (total_cpu / (total_pods * 100)) * 100) if total_pods > 0 else 0,
-                "memory_utilization_percent": min(100, (total_memory / (total_pods * 256)) * 100) if total_pods > 0 else 0
+                "cpu_utilization_percent": min( \
+    100, (total_cpu / (total_pods * 100)) * 100) if total_pods > 0 else 0,
+                "memory_utilization_percent": min( \
+    100, (total_memory / (total_pods * 256)) * 100) if total_pods > 0 else 0
             }
         except Exception as e:
             print(f"❌ Failed to get pod status: {e}")
@@ -251,7 +256,8 @@ class GKECostMonitor:
         if weekly_cost > weekly_threshold:
             alerts.append(f"🚨 Weekly cost ${weekly_cost} exceeds threshold ${weekly_threshold}")
         elif weekly_cost > weekly_threshold * 0.8:
-            warnings.append(f"⚠️ Weekly cost ${weekly_cost} approaching threshold ${weekly_threshold}")
+            warnings.append( \
+    f"⚠️ Weekly cost ${weekly_cost} approaching threshold ${weekly_threshold}")
         
         # Check monthly costs
         monthly_cost = costs.get("monthly_cost", 0)
@@ -260,7 +266,8 @@ class GKECostMonitor:
         if monthly_cost > monthly_threshold:
             alerts.append(f"🚨 Monthly cost ${monthly_cost} exceeds threshold ${monthly_threshold}")
         elif monthly_cost > monthly_threshold * 0.8:
-            warnings.append(f"⚠️ Monthly cost ${monthly_cost} approaching threshold ${monthly_threshold}")
+            warnings.append( \
+    f"⚠️ Monthly cost ${monthly_cost} approaching threshold ${monthly_threshold}")
         
         return {
             "current_phase": current_phase,
@@ -285,7 +292,8 @@ class GKECostMonitor:
         # Check machine type
         machine_type = cluster_status.get("machine_type", "")
         if machine_type != "e2-micro":
-            recommendations.append("💡 Consider using e2-micro machine type for development (cheaper)")
+            recommendations.append( \
+    "💡 Consider using e2-micro machine type for development (cheaper)")
         
         # Check preemptible instances
         if not cluster_status.get("preemptible", False):
@@ -304,7 +312,8 @@ class GKECostMonitor:
             recommendations.append("💡 CPU utilization is low - consider reducing resource requests")
         
         if memory_util < 40:
-            recommendations.append("💡 Memory utilization is low - consider reducing resource requests")
+            recommendations.append( \
+    "💡 Memory utilization is low - consider reducing resource requests")
         
         # Check for failed pods
         failed_pods = pod_status.get("failed_pods", 0)
@@ -394,7 +403,8 @@ Generated: {timestamp}
         report += f"""
 ---
 **Report Status**: {threshold_check.get('status', 'Unknown').upper()}
-**Budget Status**: {'✅ Within Budget' if threshold_check.get('within_budget') else '❌ Over Budget'}
+**Budget Status**: {'✅ Within Budget' if threshold_check.get( \
+    'within_budget') else '❌ Over Budget'}
 **Generated**: {timestamp}
 """
         

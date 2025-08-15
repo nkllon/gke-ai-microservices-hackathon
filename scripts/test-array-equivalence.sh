@@ -31,13 +31,13 @@ echo ""
 echo "🔍 Array Content Comparison:"
 echo "   Original Required APIs:"
 for api in "${REQUIRED_APIS[@]}"; do
-    echo "     - $api"
+    echo "     - "ap"i"
 done
 
 echo ""
 echo "   Generated Required APIs:"
 for api in "${REQUIRED_APIS[@]}"; do
-    echo "     - $api"
+    echo "     - "ap"i"
 done
 
 echo ""

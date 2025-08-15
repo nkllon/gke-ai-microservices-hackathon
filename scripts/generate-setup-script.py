@@ -217,7 +217,8 @@ def main():
     print(f"   📖 Model loaded: project_model_registry.json")
     print(f"   🔧 Template extracted: GKE hackathon configuration")
     print(f"   📝 Script generated: {output_path}")
-    print(f"   🔍 Verification: {'PASSED' if 'verification_result' in locals() and verification_result else 'FAILED'}")
+    print( \
+    f"   🔍 Verification: {'PASSED' if 'verification_result' in locals() and verification_result else 'FAILED'}")
     
     print("\n🚀 Ready to use the generated script!")
 

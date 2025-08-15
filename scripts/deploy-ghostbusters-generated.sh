@@ -3,6 +3,14 @@
 # 🚀 Ghostbusters AI Microservices Deployment Script
 # GKE Hackathon Implementation
 #
+# MODEL VERSION: df6775bb15b5b375
+# GENERATED FROM: project_model_registry.json
+# GENERATION TIMESTAMP: 2025-08-14T16:52:33.744973
+#
+# ⚠️  IMPORTANT: This script was generated from a specific model version
+# ⚠️  DO NOT EDIT MANUALLY - regenerate from model instead
+# ⚠️  Version mismatch between deploy/teardown = BROKEN CLEANUP
+#
 # Dependencies:
 # - gcloud CLI (Google Cloud SDK)
 # - kubectl (Kubernetes CLI) - install via: gcloud components install kubectl --quiet
